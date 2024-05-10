@@ -21,11 +21,11 @@ async function registerUser(request, response) {
       password: hashedPassword
     };
     
-    const user = await UserModel.create(payload);
-    
+    await UserModel.create(payload);
+
     return response.status(201).json({
       message: "User created successfully",
-      data: { ...user, password: '' },
+      data: { ...payload, password: '' },
       success: true,
     });
 
