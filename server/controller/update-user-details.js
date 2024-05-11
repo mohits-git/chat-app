@@ -29,7 +29,7 @@ async function updateUserDetails(request, response) {
     const userDetails = await UserModel.findById(user._id).select("-password");
 
     return response.json({
-      messaage: "User updated successfully",
+      message: "User updated successfully",
       data: userDetails,
       success: true,
     });
