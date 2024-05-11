@@ -64,7 +64,7 @@ const RegisterPage: React.FC = () => {
       toast.success(response.data.message);
       if (response.data.success) {
         setData({ name: '', email: '', password: '', profile_pic: '' });
-        navigate('/email');
+        navigate('/login');
       }
     } catch (error: any) {
       console.log("Error while registering", error);
@@ -156,7 +156,7 @@ const RegisterPage: React.FC = () => {
           </button>
         </form>
 
-        <p className="mt-4 text-center">Already have an account? <Link to={'/email'} className="text-primary hover:underline">Login</Link></p>
+        <p className="mt-4 text-center">Already have an account? <Link to={'/login'} className="text-primary hover:underline">Login</Link></p>
       </div>
     </div>
   )

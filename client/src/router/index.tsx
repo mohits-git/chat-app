@@ -13,7 +13,7 @@ const router = createBrowserRouter(
     <Route element={<App />} path="/" >
       <Route element={<AuthLayouts />}>
         <Route path="register" element={<RegisterPage />} />
-        <Route path="email" element={<CheckEmailPage />} />
+        <Route path="login" element={<CheckEmailPage />} />
         <Route path="password" element={<CheckPasswordPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
