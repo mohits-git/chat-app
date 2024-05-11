@@ -6,6 +6,7 @@ import CheckPasswordPage from "../pages/CheckPasswordPage";
 import Home from "../pages/Home";
 import MessagePage from "../components/MessagePage";
 import AuthLayouts from "../layout";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -14,6 +15,7 @@ const router = createBrowserRouter(
         <Route path="register" element={<RegisterPage />} />
         <Route path="email" element={<CheckEmailPage />} />
         <Route path="password" element={<CheckPasswordPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
       <Route path="" element={<Home />}>
         <Route path=":userId" element={<MessagePage />} />
