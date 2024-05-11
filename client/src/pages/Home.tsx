@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { logout, setToken, setUser } from "../redux/userSlice";
 import toast from "react-hot-toast";
+import Sidebar from "../components/Sidebar";
 
 const Home: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -40,8 +41,10 @@ const Home: React.FC = () => {
   }, [])
 
   return (
-    <div>
-      Home
+    <div className='grid lg:grid-cols-[300px,1fr] h-screen max-h-screen'>
+      <section className="bg-white">
+        <Sidebar />
+      </section>
       <section>
         <Outlet />
       </section>

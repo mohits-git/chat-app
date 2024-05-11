@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { PiUserCircle } from "react-icons/pi";
 
 type AvatarProps = {
@@ -10,7 +10,7 @@ type AvatarProps = {
   }
 
 const Avatar = ({ userId, name, imageUrl, width, height }: AvatarProps) => {
-  let avatarName = ""
+  let avatarName = "";
   if (name) {
     const splitName = name?.split(" ");
     if (splitName.length > 1) {

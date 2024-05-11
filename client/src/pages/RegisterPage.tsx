@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, MouseEvent as MouseEventHandler, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import uploadFile from "../helpers/upload-file";
@@ -44,7 +44,7 @@ const RegisterPage: React.FC = () => {
     setLoading(false);
   }
 
-  const handleClearUploadPicture = (e: any) => {
+  const handleClearUploadPicture = (e: MouseEventHandler<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setUploadPicture(null);
