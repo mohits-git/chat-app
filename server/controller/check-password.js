@@ -8,7 +8,7 @@ async function checkPassword(req, res) {
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(404).json({
         message: "User does not exist",
         error: true,
       });
@@ -17,7 +17,7 @@ async function checkPassword(req, res) {
     const verifyPassword = await bcryptjs.compare(password, user.password);
 
     if (!verifyPassword) {
-      return res.status(400).json({
+      return res.status(401).json({
         message: "Incorrect Password",
         error: true,
       });
