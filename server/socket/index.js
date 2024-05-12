@@ -5,6 +5,7 @@ const getUserDetailsFromToken = require('../helper/get-user-details-from-token')
 const UserModel = require('../models/user-model');
 const ConversationModel = require('../models/conversation-model');
 const MessageModel = require('../models/message-model');
+const getConversations = require('../helper/get-conversations');
 
 const app = express();
 
@@ -63,7 +64,7 @@ io.on("connection", async (socket) => {
         ]
       }).populate('messages')
         .sort({ updatedAt: -1 });
-      if(!getConversation) return;
+
       io.in(sender).emit('message', getConversation);
       io.in(receiver).emit('message', getConversation);
 
@@ -82,7 +83,6 @@ io.on("connection", async (socket) => {
           { sender: receiver, receiver: sender },
         ]
       });
-      console.log("Conversation:", conversation)
       if (!conversation) {
         const newConversation = await ConversationModel.create({
           sender,
@@ -109,10 +109,21 @@ io.on("connection", async (socket) => {
 
       io.in(sender).emit('message', getConversation);
       io.in(receiver).emit('message', getConversation);
+
+      const senderConversations = await getConversations(sender);
+      const receiverConversations = await getConversations(receiver);
+      io.in(sender).emit('all-conversation', senderConversations || []);
+      io.in(receiver).emit('all-conversation', receiverConversations || []);
     } catch (error) {
       console.log(error);
     }
-  })
+  });
+
+  socket.on('get-all-convo', async (userId) => {
+    const conversations = await getConversations(userId);
+    socket.emit('all-conversation', conversations || []);
+  });
+
 });
 
 module.exports = {
