@@ -34,7 +34,7 @@ io.on("connection", async (socket) => {
   }
 
   socket.on("disconnect", () => {
-    onlineUsers.delete(currentUserDetails?._id);
+    onlineUsers.delete(currentUserDetails?._id.toString());
     console.log(`Disconnected user ${socket.id}`);
   });
 
