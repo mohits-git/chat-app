@@ -126,6 +126,7 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
                     height={40}
                     imageUrl={data?.profile_pic}
                     name={data?.name}
+                    userId={user?._id}
                   />
                   <span>Change Photo</span>
                 </button>

@@ -1,15 +1,19 @@
 import { useMemo } from "react";
 import { PiUserCircle } from "react-icons/pi";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 type AvatarProps = {
-    userId?: string;
-    name?: string;
-    imageUrl?: string;
-    width: number;
-    height: number;
-  }
+  userId?: string;
+  name?: string;
+  imageUrl?: string;
+  width: number;
+  height: number;
+}
 
 const Avatar = ({ userId, name, imageUrl, width, height }: AvatarProps) => {
+  const onlineUsers = useSelector((state: RootState) => (state?.user?.onlineUsers));
+  const isOnline = onlineUsers.includes(userId || '');
   let avatarName = "";
   if (name) {
     const splitName = name?.split(" ");
@@ -33,7 +37,7 @@ const Avatar = ({ userId, name, imageUrl, width, height }: AvatarProps) => {
   const randomNumber = useMemo(() => (Math.floor(Math.random() * 9)), []);
 
   return (
-    <div className={`text-slate-800 shadow border overflow-hidden rounded-full font-bold relative`} style={{ width: width + "px", height: height + "px" }} >
+    <div className={`text-slate-800 shadow border rounded-full font-bold relative`} style={{ width: width + "px", height: height + "px" }} >
       {
         imageUrl ? (
           <img
@@ -41,7 +45,7 @@ const Avatar = ({ userId, name, imageUrl, width, height }: AvatarProps) => {
             width={width}
             height={height}
             alt={name}
-            className=''
+            className='rounded-full'
           />
         ) : (
           name ? (
@@ -53,6 +57,12 @@ const Avatar = ({ userId, name, imageUrl, width, height }: AvatarProps) => {
               size={width}
             />
           )
+        )
+      }
+
+      {
+        isOnline && (
+          <p className="bg-green-600 p-[5px] absolute top-1 right-0 z-10 rounded-full"></p>
         )
       }
     </div>
