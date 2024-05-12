@@ -42,12 +42,16 @@ const userSlice = createSlice({
       state.email = '';
       state.profile_pic = '';
       localStorage.removeItem('token');
+      state.socketConnection = null;
     },
     setOnlineUsers: (state, action: PayloadAction<string[]>) => {
       state.onlineUsers = action.payload;
+    },
+    setSocketConnection: (state, action) => {
+      state.socketConnection = action.payload;
     }
   }
 });
 
-export const { setUser, setToken, logout, setOnlineUsers } = userSlice.actions;
+export const { setUser, setToken, logout, setOnlineUsers, setSocketConnection } = userSlice.actions;
 export default userSlice.reducer;

@@ -4,7 +4,7 @@ import chatLogo from "../assets/chat-logo.svg"
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { logout, setOnlineUsers, setToken, setUser } from "../redux/userSlice";
+import { logout, setOnlineUsers, setSocketConnection, setToken, setUser } from "../redux/userSlice";
 import toast from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
 import { io } from "socket.io-client";
@@ -55,6 +55,8 @@ const Home: React.FC = () => {
       console.log(data);
       dispatch(setOnlineUsers(data));
     });
+
+    dispatch(setSocketConnection(socketConnection));
 
     return () => {
       socketConnection.disconnect();
