@@ -90,7 +90,7 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
     <div className='fixed top-0 bottom-0 left-0 right-0 bg-gray-700 bg-opacity-40 flex justify-center items-center z-10'>
       <div className='bg-white p-4 py-6 m-1 rounded w-full max-w-sm'>
         <h2 className='font-semibold'>Profile Details</h2>
-        <p className='text-sm '>Edit user details</p>
+        <p className='text-sm text-slate-500'>Edit user details</p>
 
         <form className='grid gap-3 mt-3' onSubmit={handleSubmit}>
           <div className='flex flex-col gap-1'>
@@ -101,21 +101,23 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
               id='name'
               value={data.name}
               onChange={handleOnChange}
-              className='w-full py-1 px-2 focus:outline-primary border-0.5'
+              className='w-full py-1 px-2 focus:outline-primary/20 border'
             />
           </div>
 
           <div>
-            <div>Photo:</div>
+            <div>Profile Picture:</div>
             <div className='my-1 flex items-center gap-4'>
-              <Avatar
-                width={40}
-                height={40}
-                imageUrl={data?.profile_pic}
-                name={data?.name}
-              />
               <label htmlFor='profile_pic'>
-                <button className='font-semibold' onClick={handleOpenUploadPhoto}>Change Photo</button>
+                <button className='flex items-center space-x-4' onClick={handleOpenUploadPhoto}>
+                  <Avatar
+                    width={40}
+                    height={40}
+                    imageUrl={data?.profile_pic}
+                    name={data?.name}
+                  />
+                  <span>Change Photo</span>
+                </button>
                 <input
                   type='file'
                   id='profile_pic'
