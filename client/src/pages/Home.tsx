@@ -4,9 +4,10 @@ import chatLogo from "../assets/chat-logo.svg"
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { logout, setToken, setUser } from "../redux/userSlice";
+import { logout, setOnlineUsers, setToken, setUser } from "../redux/userSlice";
 import toast from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
+import { io } from "socket.io-client";
 
 const Home: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -42,6 +43,24 @@ const Home: React.FC = () => {
     fetchUserDetails();
   }, [])
 
+  {/*Socket Connection*/ }
+  useEffect(() => {
+    const socketConnection = io(import.meta.env.VITE_BACKEND_URL, {
+      auth: {
+        token: localStorage.getItem('token') || ''
+      }
+    });
+
+    socketConnection.on('onlineUser', (data: string[]) => {
+      console.log(data);
+      dispatch(setOnlineUsers(data));
+    });
+
+    return () => {
+      socketConnection.disconnect();
+    }
+  }, []);
+
   const basePath = location.pathname === '/';
 
   return (
@@ -54,7 +73,7 @@ const Home: React.FC = () => {
       </section>
 
       <div className={`justify-center items-center flex-col gap-2 hidden ${!basePath ? "hidden" : "lg:flex"}`}>
-      <div className="flex justify-center items-center overflow-hidden">
+        <div className="flex justify-center items-center overflow-hidden">
           <img
             src={chatLogo}
             alt="Logo"
