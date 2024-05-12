@@ -77,12 +77,10 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
     try {
       const URL = `${import.meta.env.VITE_BACKEND_URL}/api/update-user`
 
-      const response = await axios({
-        method: 'post',
-        url: URL,
-        data: data,
-        withCredentials: true
-      })
+      const response = await axios.post(URL, {
+          name: data.name,
+          profile_pic: data.profile_pic,
+        }, { withCredentials: true });
 
       console.log('response', response)
       toast.success(response?.data?.message)
@@ -143,7 +141,7 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
 
           <Divider />
           <div className='flex gap-2 w-fit ml-auto '>
-            <button onClick={onClose} className='border-primary border text-primary px-4 py-1 rounded hover:bg-primary hover:text-white'>Cancel</button>
+            <button type='button' onClick={onClose} className='border-primary border text-primary px-4 py-1 rounded hover:bg-primary hover:text-white'>Cancel</button>
             <button onClick={handleSubmit} className='border-primary bg-primary text-white border px-4 py-1 rounded hover:bg-secondary'>Save</button>
           </div>
         </form>

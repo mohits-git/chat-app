@@ -49,6 +49,7 @@ const MessagePage: React.FC = () => {
   useEffect(() => {
     if (socketConnection) {
       socketConnection.emit("message-page", params.userId);
+      socketConnection.emit("seen", params.userId);
       const handleMessage = (data: any) => {
         if (data._id) setUserData(data);
       }

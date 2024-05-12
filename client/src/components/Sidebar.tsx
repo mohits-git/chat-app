@@ -28,8 +28,6 @@ const Sidebar: React.FC = () => {
     if (socketConnection) {
       socketConnection.emit('get-all-convo', user._id);
       const handleAllConvo = (data: any) => {
-        console.log("-------------RECEIVED ALL CONVO------------")
-        console.log(data);
         const conversationUserData = data.map((conversationUser: any) => {
           if (conversationUser?.sender?._id === conversationUser?.receiver?._id) {
             return {
