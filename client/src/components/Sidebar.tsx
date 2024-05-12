@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
 import { FaUserPlus } from "react-icons/fa";
 import { IoChatbubbleEllipses } from "react-icons/io5";
@@ -6,16 +6,22 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import EditUserDetails from "./EditUserDetails";
 import { logout } from "../redux/userSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Divider from "./Divider";
+import { FiArrowLeft } from "react-icons/fi";
+import LoadingSpinner from "./loading/spinner";
+const EditUserDetails = lazy(() => import("./EditUserDetails"));
+const SearchUser = lazy(() => import('./SearchUser'));
 
 const Sidebar: React.FC = () => {
   const user = useSelector((state: RootState) => state?.user);
   const [editUserOpen, setEditUserOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [allUsers, setAllUsers] = useState([]);
+  const [openSearchUser, setOpenSearchUser] = useState(false);
 
   const handleLogout = async () => {
     const URL = `${import.meta.env.VITE_BACKEND_URL}/api/logout`
@@ -39,9 +45,9 @@ const Sidebar: React.FC = () => {
             <IoChatbubbleEllipses size={20} />
           </NavLink>
 
-          <div className={`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-200 rounded-md`} title="Chat">
+          <button onClick={() => setOpenSearchUser(true)} className={`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-200 rounded-md`} title="Add Friends">
             <FaUserPlus size={20} />
-          </div>
+          </button>
         </div>
 
         <div className="grid gap-2">
@@ -68,12 +74,50 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
 
+      <div className="w-full">
+        <div className="h-14 flex items-center mt-1">
+          <h2 className="text-xl font-bold p-4 text-slate-800">Messages</h2>
+        </div>
+        <Divider />
+
+        <div className="h-[calc(100vh-68px)] overflow-x-hidden overflow-y-auto scrollbar">
+          {
+            allUsers.length === 0 && (
+              <div>
+                <div className="flex justify-center items-center my-4">
+                  <FiArrowLeft size={35} className="text-slate-400" />
+                </div>
+                <p className="text-sm text-center text-slate-400">Add friends to start a conversation.</p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
       {
         editUserOpen && (
-          <EditUserDetails
-            onClose={() => setEditUserOpen(false)}
-            user={user}
-          />
+          <Suspense fallback={
+            <div className='fixed top-0 bottom-0 left-0 right-0 bg-slate-700 bg-opacity-40 p-2 z-10'>
+              <LoadingSpinner />
+            </div>
+          }>
+            <EditUserDetails
+              onClose={() => setEditUserOpen(false)}
+              user={user}
+            />
+          </Suspense>
+        )
+      }
+
+      {
+        openSearchUser && (
+          <Suspense fallback={
+            <div className='fixed top-0 bottom-0 left-0 right-0 bg-slate-700 bg-opacity-40 p-2 z-10'>
+              <LoadingSpinner />
+            </div>
+          }>
+            <SearchUser onClose={() => setOpenSearchUser(false)} />
+          </Suspense>
         )
       }
     </div>
