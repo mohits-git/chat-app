@@ -124,6 +124,27 @@ io.on("connection", async (socket) => {
     socket.emit('all-conversation', conversations || []);
   });
 
+  socket.on("seen", async (userId) => {
+    const conversation = await ConversationModel.findOne({
+      "$or": [
+        { sender: userId, receiver: currentUserDetails._id },
+        { sender: currentUserDetails._id, receiver: userId },
+      ]
+    });
+
+    const convoMessages = conversation.messages;
+
+    await MessageModel.updateMany(
+      { _id: { "$in": convoMessages }, sender: userId },
+      { "$set": { seen: true } },
+    );
+
+      const senderConversations = await getConversations(currentUserDetails?._id?.toString());
+      const receiverConversations = await getConversations(userId);
+      io.in(currentUserDetails?._id?.toString()).emit('all-conversation', senderConversations || []);
+      io.in(userId).emit('all-conversation', receiverConversations || []);
+  });
+
 });
 
 module.exports = {

@@ -10,7 +10,7 @@ async function getConversations(userId) {
   }).populate('messages').populate('sender').populate('receiver').sort({ updatedAt: -1 });
 
   const conversations = userConversation.map((convo) => {
-    const unseenMessages = convo.messages.reduce((total, curr) => total + (!curr.seen ? 1 : 0), 0);
+    const unseenMessages = convo.messages.reduce((total, curr) => total + (!curr.seen && curr.sender.toString() !== userId ? 1 : 0), 0);
     return {
       _id: convo?._id,
       sender: convo?.sender,
