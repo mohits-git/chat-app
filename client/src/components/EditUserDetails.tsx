@@ -14,12 +14,23 @@ type Props = {
 
 const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
   const [data, setData] = useState({
-
     name: user?.name,
     profile_pic: user?.profile_pic
-  })
+  });
   const uploadPhotoRef = useRef<HTMLInputElement | null>(null)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const handler = ({ key }: KeyboardEvent) => {
+      if (key === "Escape") {
+        onClose();
+      }
+    }
+    document.addEventListener('keyup', handler);
+    return () => {
+      document.removeEventListener('keyup', handler);
+    }
+  }, []);
 
   useEffect(() => {
     setData((preve) => {
