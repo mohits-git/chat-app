@@ -52,8 +52,19 @@ const Home: React.FC = () => {
     });
 
     socketConnection.on('onlineUser', (data: string[]) => {
-      console.log(data);
       dispatch(setOnlineUsers(data));
+    });
+
+    socketConnection.on("message-user", (data) => {
+      console.log("User details: ", data);
+      if (data.error) {
+        navigate('/');
+        toast.error(data.message);
+      }
+    });
+
+    socketConnection.on("message", (data) => {
+      console.log("NEW MESSAGES: ", data);
     });
 
     dispatch(setSocketConnection(socketConnection));
