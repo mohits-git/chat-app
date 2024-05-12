@@ -34,6 +34,7 @@ const userSlice = createSlice({
       state.name = '';
       state.email = '';
       state.profile_pic = '';
+      localStorage.removeItem('token');
     }
   }
 });
