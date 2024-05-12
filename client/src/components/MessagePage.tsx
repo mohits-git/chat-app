@@ -53,9 +53,10 @@ const MessagePage: React.FC = () => {
         if (data._id) setUserData(data);
       }
       const handleNewMessage = (data: any) => {
-        if (data.sender === params.userId || data.receiver === params.userId) {
-          setAllMessages(data.messages);
+        if (data?.sender === params.userId || data?.receiver === params.userId) {
+          setAllMessages(data?.messages || []);
         }
+        else setAllMessages([]);
       }
       socketConnection.on("message-user", handleMessage);
       socketConnection.on("message", handleNewMessage);
@@ -105,9 +106,7 @@ const MessagePage: React.FC = () => {
       console.log("Could not upload video", error);
     }
     setLoading(false);
-
   }
-
 
   const handleClearUploadImage = (e: MouseEventHandler<HTMLButtonElement>) => {
     e.preventDefault();

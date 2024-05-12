@@ -1,12 +1,12 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
-import { FaUserPlus } from "react-icons/fa";
+import { FaImage, FaUserPlus, FaVideo } from "react-icons/fa";
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "./Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { logout } from "../redux/userSlice";
+import { logout, setSocketConnection } from "../redux/userSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Divider from "./Divider";
@@ -20,8 +20,45 @@ const Sidebar: React.FC = () => {
   const [editUserOpen, setEditUserOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [allUsers, setAllUsers] = useState([]);
   const [openSearchUser, setOpenSearchUser] = useState(false);
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const socketConnection = useSelector((state: RootState) => state?.user?.socketConnection);
+
+  useEffect(() => {
+    if (socketConnection) {
+      socketConnection.emit('get-all-convo', user._id);
+      const handleAllConvo = (data: any) => {
+        console.log("-------------RECEIVED ALL CONVO------------")
+        console.log(data);
+        const conversationUserData = data.map((conversationUser: any) => {
+          if (conversationUser?.sender?._id === conversationUser?.receiver?._id) {
+            return {
+              ...conversationUser,
+              userDetails: conversationUser?.sender
+            }
+          }
+          else if (conversationUser?.receiver?._id !== user?._id) {
+            return {
+              ...conversationUser,
+              userDetails: conversationUser.receiver
+            }
+          } else {
+            return {
+              ...conversationUser,
+              userDetails: conversationUser.sender
+            }
+          }
+        })
+
+        setAllUsers(conversationUserData)
+      }
+      socketConnection.on('all-conversation', handleAllConvo);
+
+      return () => {
+        socketConnection.off('all-conversation', handleAllConvo);
+      }
+    }
+  }, [socketConnection, user])
 
   const handleLogout = async () => {
     const URL = `${import.meta.env.VITE_BACKEND_URL}/api/logout`
@@ -91,6 +128,53 @@ const Sidebar: React.FC = () => {
                 <p className="text-sm text-center text-slate-400">Add friends to start a conversation.</p>
               </div>
             )
+          }
+
+          {
+            allUsers.map((conv) => {
+              return (
+                <NavLink to={"/" + conv?.userDetails?._id} key={conv?._id} className='flex items-center gap-2 py-3 px-2 border rounded hover:bg-slate-100 cursor-pointer'>
+                  <div>
+                    <Avatar
+                      imageUrl={conv?.userDetails?.profile_pic}
+                      name={conv?.userDetails?.name}
+                      width={40}
+                      height={40}
+                    />
+                  </div>
+                  <div>
+                    <h3 className='text-ellipsis line-clamp-1 font-semibold text-base'>{conv?.userDetails?.name}</h3>
+                    <div className='text-slate-500 text-xs flex items-center gap-1'>
+                      <div className='flex items-center gap-1'>
+                        {
+                          conv?.lastMessage?.imageUrl && (
+                            <div className='flex items-center gap-1'>
+                              <span><FaImage /></span>
+                              {!conv?.lastMsg?.text && <span>Image</span>}
+                            </div>
+                          )
+                        }
+                        {
+                          conv?.lastMessage?.videoUrl && (
+                            <div className='flex items-center gap-1'>
+                              <span><FaVideo /></span>
+                              {!conv?.lastMsg?.text && <span>Video</span>}
+                            </div>
+                          )
+                        }
+                      </div>
+                      <p className='text-ellipsis line-clamp-1'>{conv?.lastMessage?.text}</p>
+                    </div>
+                  </div>
+                  {
+                    Boolean(conv?.unseen) && (
+                      <p className='text-xs w-6 h-6 flex justify-center items-center ml-auto p-1 bg-primary text-white font-semibold rounded-full'>{conv?.unseen}</p>
+                    )
+                  }
+
+                </NavLink>
+              )
+            })
           }
         </div>
       </div>
