@@ -33,6 +33,7 @@ async function checkPassword(req, res) {
       http: true,
       secure: true,
       domain: process.env.FRONTEND_DOMAIN,
+      sameSite: 'none',
     }
 
     return res
