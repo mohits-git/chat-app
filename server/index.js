@@ -18,7 +18,7 @@ app.use(cookiesParser());
 
 app.get('/', (req, res) => {
   res.json({
-    message: `Server running at ${PORT}`
+    message: `Server running at 8080`
   })
 });
 
