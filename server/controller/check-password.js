@@ -30,8 +30,6 @@ async function checkPassword(req, res) {
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
     const cookieOptions = {
-      http: true,
-      secure: true,
       domain: process.env.FRONTEND_DOMAIN,
       sameSite: 'none',
     }

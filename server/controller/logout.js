@@ -1,8 +1,6 @@
 async function logout(request, response) {
   try {
     const cookieOptions = {
-      http: true,
-      secure: true,
       domain: process.env.FRONTEND_DOMAIN,
       sameSite: 'none',
     }
