@@ -18,10 +18,7 @@ const Home: React.FC = () => {
   const fetchUserDetails = async () => {
     const URL = `${import.meta.env.VITE_BACKEND_URL}/api/user-details`
     try {
-      const response = await axios({
-        url: URL,
-        withCredentials: true
-      });
+      const response = await axios.get(URL, { withCredentials: true });
 
       if (response.data.data.logout) {
         dispatch(logout());

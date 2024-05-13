@@ -32,6 +32,7 @@ async function checkPassword(req, res) {
     const cookieOptions = {
       http: true,
       secure: true,
+      domain: process.env.FRONTEND_DOMAIN,
     }
 
     return res

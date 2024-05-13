@@ -3,6 +3,7 @@ async function logout(request, response) {
     const cookieOptions = {
       http: true,
       secure: true,
+      domain: process.env.FRONTEND_DOMAIN,
     }
     return response.cookie('token', '', cookieOptions).status(200).json({
       message: "session out",
