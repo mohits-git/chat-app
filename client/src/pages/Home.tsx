@@ -21,7 +21,6 @@ const Home: React.FC = () => {
       const response = await axios.get(URL, { withCredentials: true });
 
       if (response.data.data.logout) {
-        dispatch(logout());
         navigate('/login')
         toast("Please login to chat.");
         return;
