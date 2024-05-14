@@ -132,7 +132,9 @@ io.on("connection", async (socket) => {
       ]
     });
 
-    const convoMessages = conversation.messages;
+    if(!conversation) return;
+
+    const convoMessages = conversation?.messages;
 
     await MessageModel.updateMany(
       { _id: { "$in": convoMessages }, sender: userId },
