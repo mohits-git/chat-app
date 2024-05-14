@@ -18,7 +18,13 @@ const Home: React.FC = () => {
   const fetchUserDetails = async () => {
     const URL = `${import.meta.env.VITE_BACKEND_URL}/api/user-details`
     try {
-      const response = await axios.get(URL, { withCredentials: true });
+      const response = await axios.get(URL,
+        {
+          withCredentials: true,
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token') || ''}`
+          }
+        });
 
       if (response.data.data.logout) {
         navigate('/login')

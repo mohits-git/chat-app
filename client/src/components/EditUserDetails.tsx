@@ -78,9 +78,14 @@ const EditUserDetails: React.FC<Props> = React.memo(({ onClose, user }) => {
       const URL = `${import.meta.env.VITE_BACKEND_URL}/api/update-user`
 
       const response = await axios.post(URL, {
-          name: data.name,
-          profile_pic: data.profile_pic,
-        }, { withCredentials: true });
+        name: data.name,
+        profile_pic: data.profile_pic,
+      }, {
+        withCredentials: true,
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token') || ''}`
+        }
+      });
 
       console.log('response', response)
       toast.success(response?.data?.message)
