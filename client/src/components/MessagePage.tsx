@@ -56,6 +56,7 @@ const MessagePage: React.FC = () => {
       const handleNewMessage = (data: any) => {
         if (data?.sender === params.userId || data?.receiver === params.userId) {
           setAllMessages(data?.messages || []);
+          socketConnection.emit("seen", params.userId);
         }
         else setAllMessages([]);
       }
