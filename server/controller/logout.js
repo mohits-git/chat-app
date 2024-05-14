@@ -1,6 +1,7 @@
 async function logout(request, response) {
   try {
     const cookieOptions = {
+      maxAge: 24*60*60*1000,
       domain: process.env.FRONTEND_DOMAIN,
       sameSite: 'none',
     }
